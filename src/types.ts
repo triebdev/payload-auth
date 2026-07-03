@@ -245,6 +245,17 @@ export interface PayloadAuthPluginConfig {
    */
   contexts?: Record<string, ApplicationContextConfig>
   /**
+   * Auth cookie configuration.
+   */
+  cookies?: {
+    /**
+     * Mark auth cookies as `Secure`. Defaults to `true` when `serverURL`
+     * uses https, `false` otherwise (NOT NODE_ENV-based — `next start`
+     * forces NODE_ENV=production even on plain-http localhost).
+     */
+    secure?: boolean
+  }
+  /**
    * The context assigned to auto-created users when none is requested.
    * Defaults to the first key of `contexts`.
    */
@@ -342,6 +353,8 @@ export interface ResolvedAuthPluginOptions {
     Required<Pick<AgentLoginConfig, 'allowedHostnames' | 'email'>>
   allowedOrigins: string[]
   contexts: Record<string, ApplicationContextConfig>
+  /** Whether auth cookies carry the `Secure` attribute. */
+  cookieSecure: boolean
   defaultContext: string | undefined
   email: MagicLinkEmailConfig
   enableAgentLogin: boolean
@@ -387,6 +400,7 @@ export function resolveOptions(opts: PayloadAuthPluginConfig = {}): ResolvedAuth
     },
     allowedOrigins: opts.allowedOrigins ?? [serverURL],
     contexts,
+    cookieSecure: opts.cookies?.secure ?? url.protocol === 'https:',
     defaultContext: opts.defaultContext ?? contextNames[0],
     email: opts.email ?? {},
     enableAgentLogin: opts.enableAgentLogin ?? false,

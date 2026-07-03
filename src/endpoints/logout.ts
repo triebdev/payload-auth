@@ -30,8 +30,14 @@ export function createLogoutEndpoints(options: ResolvedAuthPluginOptions): Endpo
 
           // Clear cookies
           const headers = new Headers({ 'Content-Type': 'application/json' })
-          headers.append('Set-Cookie', buildClearCookieHeader('payload-token'))
-          headers.append('Set-Cookie', buildClearCookieHeader('refresh-token'))
+          headers.append(
+            'Set-Cookie',
+            buildClearCookieHeader('payload-token', options.cookieSecure),
+          )
+          headers.append(
+            'Set-Cookie',
+            buildClearCookieHeader('refresh-token', options.cookieSecure),
+          )
 
           return new Response(JSON.stringify({ success: true }), { headers, status: 200 })
         } catch (error) {
@@ -54,8 +60,14 @@ export function createLogoutEndpoints(options: ResolvedAuthPluginOptions): Endpo
           await invalidateAllUserSessions(payload, String(user.id), options.sessionsSlug)
 
           const headers = new Headers({ 'Content-Type': 'application/json' })
-          headers.append('Set-Cookie', buildClearCookieHeader('payload-token'))
-          headers.append('Set-Cookie', buildClearCookieHeader('refresh-token'))
+          headers.append(
+            'Set-Cookie',
+            buildClearCookieHeader('payload-token', options.cookieSecure),
+          )
+          headers.append(
+            'Set-Cookie',
+            buildClearCookieHeader('refresh-token', options.cookieSecure),
+          )
 
           return new Response(JSON.stringify({ success: true }), { headers, status: 200 })
         } catch (error) {

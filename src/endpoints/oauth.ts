@@ -339,6 +339,7 @@ export function createOAuthEndpoints(options: ResolvedAuthPluginOptions): Endpoi
               'payload-token',
               session.accessToken,
               options.tokens.accessTokenLifetime,
+              options.cookieSecure,
             ),
           )
           headers.append(
@@ -347,6 +348,7 @@ export function createOAuthEndpoints(options: ResolvedAuthPluginOptions): Endpoi
               'refresh-token',
               session.refreshToken,
               Math.floor((session.expiresAt.getTime() - Date.now()) / 1000),
+              options.cookieSecure,
             ),
           )
 

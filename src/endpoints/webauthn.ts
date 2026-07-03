@@ -494,6 +494,7 @@ export function createWebAuthnEndpoints(
               'payload-token',
               session.accessToken,
               options.tokens.accessTokenLifetime,
+              options.cookieSecure,
             ),
           )
           headers.append(
@@ -502,6 +503,7 @@ export function createWebAuthnEndpoints(
               'refresh-token',
               session.refreshToken,
               Math.floor((session.expiresAt.getTime() - Date.now()) / 1000),
+              options.cookieSecure,
             ),
           )
 

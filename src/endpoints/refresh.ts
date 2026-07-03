@@ -258,6 +258,7 @@ async function performRefresh(
       'payload-token',
       newToken,
       options.tokens.accessTokenLifetime,
+      options.cookieSecure,
     ),
     email: user.email as string,
     userId: String(user.id),

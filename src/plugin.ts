@@ -127,7 +127,7 @@ function extendUsersCollection(
       ...(typeof collection.auth === 'object' ? collection.auth : {}),
       cookies: {
         sameSite: 'Lax' as const,
-        secure: process.env.NODE_ENV === 'production',
+        secure: options.cookieSecure,
       },
       disableLocalStrategy: true,
       lockTime: 600_000, // 10 minutes

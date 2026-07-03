@@ -84,17 +84,26 @@ export async function createSession(input: CreateSessionInput): Promise<SessionR
 /**
  * Builds a Set-Cookie header string for auth cookies.
  * Used by endpoints that return Response directly.
+ *
+ * `secure` should come from the resolved plugin options (`cookieSecure`,
+ * derived from the serverURL protocol). Falling back to NODE_ENV would mark
+ * cookies Secure whenever the app runs via `next start` (which forces
+ * NODE_ENV=production) — breaking plain-http localhost setups such as CI e2e.
  */
-export function buildAuthCookieHeader(name: string, value: string, maxAge: number): string {
-  const isProduction = process.env.NODE_ENV === 'production'
-  return `${name}=${value}; HttpOnly; ${isProduction ? 'Secure; ' : ''}SameSite=Lax; Path=/; Max-Age=${maxAge}`
+export function buildAuthCookieHeader(
+  name: string,
+  value: string,
+  maxAge: number,
+  secure: boolean = process.env.NODE_ENV === 'production',
+): string {
+  return `${name}=${value}; HttpOnly; ${secure ? 'Secure; ' : ''}SameSite=Lax; Path=/; Max-Age=${maxAge}`
 }
 
 /**
  * Builds a Set-Cookie header that clears an auth cookie.
  */
-export function buildClearCookieHeader(name: string): string {
-  return buildAuthCookieHeader(name, '', 0)
+export function buildClearCookieHeader(name: string, secure?: boolean): string {
+  return buildAuthCookieHeader(name, '', 0, secure)
 }
 
 /**
